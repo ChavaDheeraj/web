@@ -1,18 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { ArrowUpRight, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 /* ── Constants ─────────────────────────────────────── */
 const GRAD = "linear-gradient(90deg,#63B7C9,#4BC5C7,#4DC2B1,#5CC697,#76C47C,#A4BE4B,#CCB10A,#E9A400)";
 
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
 };
-const stagger = {
+const stagger: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.08 } },
 };
