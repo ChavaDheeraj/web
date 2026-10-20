@@ -1,14 +1,17 @@
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/syne/400.css";
+@import "@fontsource/syne/500.css";
+@import "@fontsource/geist-mono/400.css";
 @import "tailwindcss";
-
-@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+  --color-surface: var(--surface);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
@@ -18,17 +21,22 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-ink: #111110;
+  --color-ink-deep: #0a0a09;
+  --color-on-ink: var(--on-ink);
+  --color-on-ink-muted: var(--on-ink-muted);
+  --color-on-ink-line: var(--on-ink-line);
+  --color-error: var(--error);
 
   /* Typography */
   --font-serif: var(--font-serif);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
 
-  /* Custom Color Palette from User */
+  /* Brand spectrum, sampled from the logo */
   --color-trigarty-cyan: #63B7C9;
   --color-trigarty-aqua: #4BC5C7;
   --color-trigarty-mint: #4DC2B1;
@@ -40,74 +48,651 @@
 }
 
 :root {
-  --radius: 0.25rem; /* Sharper edges for editorial feel */
-  
-  /* Brand palette */
+  --radius: 0;
+
+  --font-serif: "Syne", serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono", monospace;
+
   --background: #F3F3F3;
   --foreground: #111110;
-  
   --card: #ECECEC;
   --card-foreground: #111110;
-  
-  --popover: #F3F3F3;
-  --popover-foreground: #111110;
-  
-  --primary: #4DC2B1; /* Mint Teal */
-  --primary-foreground: #F3F3F3;
-  
-  --secondary: #111110; /* Ink */
-  --secondary-foreground: #F3F3F3;
-  
-  --muted: rgba(17,17,16,0.6); /* Muted gray text */
-  --muted-foreground: rgba(17,17,16,0.4);
-  
-  --accent: rgba(17,17,16,0.05);
-  --accent-foreground: #111110;
-  
-  --destructive: #E9A400;
-  --border: rgba(17,17,16,0.1);
-  --input: rgba(17,17,16,0.18);
-  --ring: #4DC2B1;
-}
-
-.dark {
-  /* Minimal dark mode support for future, but defaults to light UI */
-  --background: #111110;
-  --foreground: #F3F3F3;
-  --card: rgba(249,248,246,0.05);
-  --card-foreground: #F3F3F3;
-  --popover: #111110;
-  --popover-foreground: #F3F3F3;
+  /* Raised surface on paper: cards and panels sit on white, never on shadows. */
+  --surface: #FFFFFF;
   --primary: #4DC2B1;
   --primary-foreground: #111110;
-  --secondary: #ECECEC;
-  --secondary-foreground: #111110;
-  --muted: rgba(249,248,246,0.6);
-  --muted-foreground: rgba(249,248,246,0.4);
-  --accent: rgba(249,248,246,0.05);
-  --accent-foreground: #F3F3F3;
-  --border: rgba(249,248,246,0.1);
-  --input: rgba(249,248,246,0.18);
-  --ring: #4DC2B1;
+  --secondary: #111110;
+  --secondary-foreground: #F3F3F3;
+  /* Text on paper: --muted is 5.6:1 on #F3F3F3 and is the lightest text colour allowed.
+     --muted-foreground is for hairlines and decoration only, never text. */
+  --muted: rgba(17, 17, 16, 0.66);
+  --muted-foreground: rgba(17, 17, 16, 0.4);
+  --accent: rgba(17, 17, 16, 0.05);
+  --accent-foreground: #111110;
+  --destructive: #E9A400;
+  --border: rgba(17, 17, 16, 0.12);
+  --input: rgba(17, 17, 16, 0.28);
+  --ring: #111110;
+  /* Text on ink: --on-ink-muted is 7.5:1 on #111110. */
+  --on-ink: #F3F3F3;
+  --on-ink-muted: rgba(243, 243, 243, 0.7);
+  --on-ink-line: rgba(243, 243, 243, 0.12);
+  /* Form errors: dark amber from the golden family, 6.4:1 on paper. */
+  --error: #8A5A00;
+
+  --spectrum: linear-gradient(90deg, #63B7C9, #4BC5C7, #4DC2B1, #5CC697, #76C47C, #A4BE4B, #CCB10A, #E9A400);
+  --spectrum-diag: linear-gradient(120deg, #4BC5C7 0%, #5CC697 35%, #A4BE4B 65%, #E9A400 100%);
+  --mark-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 208 178'%3E%3Cpath d='M104 0L208 178H167L104 70L41 178H0Z'/%3E%3C/svg%3E");
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --header-h: 68px;
+  --gutter: clamp(1.25rem, 4vw, 3.5rem);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: calc(var(--header-h) + 16px);
+    background: #0a0a09;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
   }
   body {
     @apply bg-background text-foreground font-sans;
+    font-feature-settings: "ss01", "cv11";
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-normal tracking-tight;
+    @apply font-serif tracking-tight;
+    font-weight: 500;
+    text-wrap: balance;
   }
-  
-  /* Shared section padding utilities */
+  p { text-wrap: pretty; }
+  img, svg, video { max-width: 100%; }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
+  .on-ink :focus-visible {
+    outline-color: var(--color-trigarty-aqua);
+  }
+  ::selection {
+    background: rgba(77, 194, 177, 0.35);
+  }
+}
+
+@layer components {
+  /* ---------- Layout ---------- */
+  .gutter {
+    padding-inline: var(--gutter);
+  }
   .section-padding {
-    @apply py-20 md:py-32 px-6 md:px-12;
+    padding-block: clamp(4.5rem, 3rem + 6vw, 8.5rem);
+    padding-inline: var(--gutter);
   }
-  
   .container-max {
-    @apply max-w-6xl mx-auto;
+    max-width: 76rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+  .container-narrow {
+    max-width: 52rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  /* ---------- Surfaces ---------- */
+  .on-ink {
+    background-color: #111110;
+    color: var(--on-ink);
+  }
+  .on-ink.ink-deep,
+  .ink-deep {
+    background-color: #0a0a09;
+  }
+  .spectrum {
+    background: var(--spectrum);
+  }
+
+  /* Hairline grid used behind dark heroes: structure, not decoration. */
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgba(243, 243, 243, 0.045) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(243, 243, 243, 0.045) 1px, transparent 1px);
+    background-size: 96px 96px;
+    mask-image: radial-gradient(ellipse 80% 70% at 70% 40%, #000 30%, transparent 75%);
+  }
+
+  /* Raised panel on paper. */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .on-ink .panel,
+  .panel-ink {
+    background: rgba(243, 243, 243, 0.035);
+    border: 1px solid var(--on-ink-line);
+  }
+
+  /* Gradient hairline border that works on any background (mask, not background-clip). */
+  .g-border {
+    position: relative;
+  }
+  .g-border::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    background: var(--spectrum);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease-out);
+  }
+  /* Interactive card: the gradient border and a small lift appear on hover/focus. */
+  .card-link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    transition: transform 0.35s var(--ease-out), border-color 0.3s;
+  }
+  .card-link::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    background: var(--spectrum);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease-out);
+  }
+  .card-link:hover,
+  .card-link:focus-visible {
+    transform: translateY(-3px);
+    border-color: transparent;
+  }
+  .card-link:hover::after,
+  .card-link:focus-visible::after {
+    opacity: 1;
+  }
+  .card-link:focus-visible {
+    outline-offset: 4px;
+  }
+
+  /* ---------- Brand highlight ----------
+     The key phrase of a heading takes the logo spectrum as its text colour, on
+     paper and on ink alike. One phrase per heading, never body copy.
+     --hl-paper is the single switch for the paper version. */
+  .hl {
+    background-image: var(--hl-paper, var(--spectrum));
+    background-size: 100% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+  .on-ink .hl {
+    background-image: var(--spectrum);
+  }
+
+  /* "What we are not": the phrase struck through with the spectrum. */
+  .strike {
+    background-image: var(--spectrum);
+    background-repeat: no-repeat;
+    background-size: 100% 2px;
+    background-position: 0 58%;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  /* Mono label marked with the logo's Λ in the spectrum: the site's section marker. */
+  .eyebrow {
+    @apply font-mono text-[12px] uppercase tracking-[0.18em] text-muted flex items-center gap-3 mb-6;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 13px;
+    height: 11px;
+    flex-shrink: 0;
+    background: var(--spectrum);
+    -webkit-mask: var(--mark-mask) center / contain no-repeat;
+    mask: var(--mark-mask) center / contain no-repeat;
+  }
+  .on-ink .eyebrow {
+    color: var(--on-ink-muted);
+  }
+
+  /* ---------- Type scale (fluid, one place) ---------- */
+  .t-display {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(3rem, 1.5rem + 6.2vw, 7.25rem);
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+  }
+  .t-h1 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(2.5rem, 1.55rem + 3.9vw, 5rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+  .t-h2 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(2rem, 1.35rem + 2.5vw, 3.5rem);
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+  }
+  .t-h3 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 1.12rem + 0.5vw, 1.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+  .t-statement {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 1.15rem + 1.5vw, 2.375rem);
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+  }
+  .t-lede {
+    color: rgba(17, 17, 16, 0.78);
+    font-size: clamp(1.0625rem, 0.98rem + 0.35vw, 1.25rem);
+    line-height: 1.6;
+    max-width: 56ch;
+  }
+  .t-body {
+    color: rgba(17, 17, 16, 0.72);
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    max-width: 62ch;
+  }
+  .t-small {
+    color: rgba(17, 17, 16, 0.72);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+  .t-label {
+    @apply font-mono text-[12px] uppercase tracking-[0.14em] text-muted;
+  }
+  .t-num {
+    @apply font-mono text-[12px] tracking-[0.12em] text-muted;
+  }
+  .on-ink .t-lede {
+    color: rgba(243, 243, 243, 0.78);
+  }
+  .on-ink .t-body,
+  .on-ink .t-small,
+  .on-ink .t-label,
+  .on-ink .t-num {
+    color: var(--on-ink-muted);
+  }
+
+  /* ---------- Buttons ----------
+     Primary: ink, with the spectrum fading in on hover.
+     Spectrum: the strongest action, used on dark backgrounds.
+     Ghost: transparent with a spectrum hairline border.
+     Tertiary actions use .more-link. */
+  .btn {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem;
+    min-height: 3.25rem;
+    padding: 0.75rem 1.375rem;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    border: 1px solid transparent;
+    user-select: none;
+    transition: color 0.25s var(--ease-out), background-color 0.25s var(--ease-out), border-color 0.25s, transform 0.15s;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn .btn-arrow {
+    display: inline-block;
+    transition: transform 0.3s var(--ease-out);
+  }
+  .btn:hover .btn-arrow,
+  .btn:focus-visible .btn-arrow {
+    transform: translateX(4px);
+  }
+  .btn-sm {
+    min-height: 2.75rem;
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    gap: 0.875rem;
+  }
+
+  .btn-primary {
+    background: #111110;
+    color: #F3F3F3;
+  }
+  .btn-primary::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    background: var(--spectrum);
+    opacity: 0;
+    transition: opacity 0.3s var(--ease-out);
+  }
+  .btn-primary:hover,
+  .btn-primary:focus-visible {
+    color: #111110;
+  }
+  .btn-primary:hover::before,
+  .btn-primary:focus-visible::before {
+    opacity: 1;
+  }
+
+  .btn-spectrum {
+    background: var(--spectrum);
+    background-size: 160% 100%;
+    background-position: 0 0;
+    color: #111110;
+    transition: background-position 0.5s var(--ease-out), transform 0.15s;
+  }
+  .btn-spectrum:hover,
+  .btn-spectrum:focus-visible {
+    background-position: 100% 0;
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--foreground);
+  }
+  .btn-ghost::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    padding: 1px;
+    background: var(--spectrum);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .btn-ghost:hover,
+  .btn-ghost:focus-visible {
+    background: rgba(17, 17, 16, 0.05);
+  }
+  .on-ink .btn-ghost {
+    color: var(--on-ink);
+  }
+  .on-ink .btn-ghost:hover,
+  .on-ink .btn-ghost:focus-visible {
+    background: rgba(243, 243, 243, 0.07);
+  }
+
+  .btn[disabled],
+  .btn[aria-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.55;
+    transform: none;
+  }
+
+  /* Inline text link: hairline underline that turns into the spectrum. */
+  .text-link {
+    background-image: linear-gradient(currentColor, currentColor), var(--spectrum);
+    background-repeat: no-repeat;
+    background-size: 100% 1px, 0% 2px;
+    background-position: 0 100%, 0 100%;
+    padding-bottom: 1px;
+    transition: background-size 0.35s var(--ease-out);
+  }
+  .text-link:hover,
+  .text-link:focus-visible {
+    background-size: 0% 1px, 100% 2px;
+  }
+
+  /* Tertiary action: "See all capabilities →". Sans, so it reads as a link, not a label. */
+  .more-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.75rem;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--foreground);
+  }
+  .more-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.5rem;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.3;
+  }
+  .more-link::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.5rem;
+    height: 2px;
+    background: var(--spectrum);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease-out);
+    z-index: 1;
+  }
+  .more-link:hover::before,
+  .more-link:focus-visible::before {
+    transform: scaleX(1);
+  }
+  .more-link .btn-arrow {
+    display: inline-block;
+    transition: transform 0.3s var(--ease-out);
+  }
+  .more-link:hover .btn-arrow {
+    transform: translateX(4px);
+  }
+  .on-ink .more-link {
+    color: var(--on-ink);
+  }
+
+  /* Square tag, used for lists of items (never pills). */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid var(--border);
+    padding: 0.375rem 0.625rem;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--foreground);
+    background: var(--surface);
+  }
+  .on-ink .tag {
+    border-color: var(--on-ink-line);
+    color: var(--on-ink);
+    background: rgba(243, 243, 243, 0.03);
+  }
+
+  .rule-row {
+    @apply border-b border-border;
+  }
+
+  .skip-link {
+    @apply absolute left-4 -top-20 z-[800] bg-foreground text-background px-4 py-3 font-mono text-[12px] uppercase tracking-[0.12em];
+  }
+  .skip-link:focus {
+    @apply top-4;
+  }
+
+  /* ---------- Forms ---------- */
+  .field-label {
+    @apply block text-[14px] font-semibold text-foreground mb-2;
+  }
+  .field-input {
+    @apply w-full border border-input px-4 py-3 min-h-13 text-[16px] text-foreground transition-[border-color,box-shadow] duration-200;
+    background: var(--surface);
+  }
+  .field-input::placeholder {
+    color: rgba(17, 17, 16, 0.45);
+  }
+  .field-input:hover {
+    border-color: rgba(17, 17, 16, 0.55);
+  }
+  .field-input:focus {
+    outline: none;
+    border-color: #111110;
+    box-shadow: 0 2px 0 0 #4DC2B1;
+  }
+  .field-input[aria-invalid="true"] {
+    border-color: var(--error);
+  }
+  .field-error {
+    @apply mt-2 text-[13px] font-medium;
+    color: var(--error);
+  }
+
+  /* ---------- The seven-stage climb ----------
+     Phones: horizontal bars that grow. md and up: columns that rise. */
+  .climb {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .climb-step {
+    display: grid;
+    grid-template-columns: 6.75rem 1fr;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .climb-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .climb-track {
+    height: 0.875rem;
+    display: flex;
+  }
+  .climb-bar {
+    width: calc((var(--i) + 1) / 7 * 100%);
+    height: 100%;
+    transform-origin: left;
+    transition: opacity 0.4s var(--ease-out), filter 0.4s;
+  }
+  .climb-step[data-dim="true"] .climb-bar {
+    opacity: 0.2;
+    filter: saturate(0.4);
+  }
+  .panel .climb-step[data-dim="true"] .climb-bar {
+    opacity: 0.32;
+    filter: saturate(0.25);
+  }
+  /* Dimmed stages keep readable labels (muted colour, not opacity, which pushed
+     the 12px text below 3:1); the bars carry the dimming. */
+  .climb-step[data-dim="true"] .climb-label {
+    color: var(--muted);
+  }
+  .on-ink .climb-step[data-dim="true"] .climb-label {
+    color: var(--on-ink-muted);
+  }
+  .climb-note {
+    grid-column: 2;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  @media (min-width: 768px) {
+    .climb {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      align-items: start;
+      gap: 0.625rem;
+    }
+    .climb-step {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto;
+      align-items: end;
+      gap: 0.875rem;
+      height: 100%;
+    }
+    .climb-track {
+      height: var(--climb-h, 11rem);
+      align-items: flex-end;
+      order: -1;
+    }
+    .climb-bar {
+      width: 100%;
+      height: calc((var(--i) + 1) / 7 * 100%);
+      transform-origin: bottom;
+    }
+    .climb-note {
+      grid-column: auto;
+    }
+  }
+  /* CSS-only, so it never depends on (or waits for) the JS bundle. */
+  .climb[data-animate] .climb-bar {
+    animation: climb-in 1s var(--ease-out) both;
+    animation-delay: calc(var(--i) * 70ms + 150ms);
+  }
+  @keyframes climb-in {
+    from { transform: scale(0); }
+  }
+  @media (min-width: 768px) {
+    @keyframes climb-in {
+      from { transform: scaleY(0); }
+    }
+  }
+
+  /* ---------- Scroll reveal ----------
+     Content is visible without JS; the .js class (set in <head>) opts in. */
+  /* Pending elements hide instantly (they are off screen); only the reveal animates. */
+  .js [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  .js [data-reveal].is-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    transition-delay: calc(var(--d, 0) * 80ms);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal] {
+    opacity: 1;
+    transform: none;
   }
 }

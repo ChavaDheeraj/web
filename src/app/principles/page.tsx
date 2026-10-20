@@ -1,142 +1,239 @@
-"use client";
-
-import React from "react";
-import { motion } from "framer-motion";
-import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import { Arrow, CtaBand, Flow, PageHero, SectionHeader } from "@/components/blocks";
+import { DIFFERENTIATORS, IP_OUTCOMES, LONG_TERM_CHAIN, MODELS, NOT_LIST } from "@/content/site-content";
+import { pad } from "@/lib/brand";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata = pageMetadata({
+  title: "Principles",
+  description:
+    "Trigarty works as an extension of your team, not as a vendor. See what makes us different, what we are not, and the institution we are building.",
+  path: "/principles",
+});
+
+/* The vendor pattern from the brief, set against Trigarty's own model from site-content. */
+const VENDOR_FLOW = ["Brief", "Deliver", "Leave"];
+const OUR_FLOW = MODELS.find((m) => m.name === "Trigarty")?.flow ?? [];
+
+/* Where each difference is explained in full elsewhere on the site. */
+const ROW_LINKS: Record<string, { href: string; label: string }> = {
+  "02": { href: "/capabilities", label: "The six capabilities" },
+  "03": { href: "/rebuilding", label: "Organizational rebuilding" },
+  "04": { href: "/approach", label: "How the work runs" },
+  "05": { href: "/capabilities#stages", label: "The stages we work across" },
+  "06": { href: "/ventures", label: "Ventures" },
+};
+
+/* NOT_LIST items read "An agency."; lower-case the article so each row reads "Not an agency." */
+const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 
 export default function PrinciplesPage() {
-  const sections = [
-    {
-      num: "I.",
-      title: "Execution is the Only Real Moat",
-      content: "In the early days of a company, strategy is cheap. Competitors can copy your product features, mock your marketing copy, and raise capital at identical valuations. What they cannot copy is your velocity. A company that ships twice as fast as its nearest competitor will gather twice as much feedback, iterate twice as quickly, and out-evolve the market before others can organize a board meeting. Execution is not a downstream concern — it is the core strategic advantage."
-    },
-    {
-      num: "II.",
-      title: "The Illusion of Advisory Progress",
-      content: "Consultants deliver decks. Advisors deliver opinions. Both are useful for allocating blame, but neither will help you hire your next principal engineer or unblock a stalled product release. Startups do not fail because they lacked a 100-page operational roadmap; they fail because the daily loop of execution broke down. We believe in direct operational ownership. If a bottleneck exists, we don't present an analysis on it — we embed inside and remove it."
-    },
-    {
-      num: "III.",
-      title: "Speed is an Architectural Choice",
-      content: "When a team is slow, founders often blame individual output or motivation. This is almost always incorrect. Teams are slow because their systems force them to be slow. Ambiguous ownership, bloated meeting structures, undefined decision frameworks, and approval bottlenecks degrade momentum. We simplify before we scale. We design lightweight, bulletproof accountability systems that restore personal ownership and clear the field for rapid delivery."
-    },
-    {
-      num: "IV.",
-      title: "Deliberate Self-Extraction",
-      content: "An operator who makes themselves indispensable has failed. The ultimate goal of every embed is to build systems and train internal owners so stable that the company runs faster after we exit. We document every protocol, map every decision flow, and test the new structure rigorously. We exit deliberately, leaving behind a highly disciplined operational machine that requires zero external guidance to sustain its velocity."
-    }
-  ];
-
+  const [first, ...rest] = DIFFERENTIATORS;
   return (
-    <div className="min-h-screen bg-background text-foreground relative selection:bg-primary/20 selection:text-primary">
-      {/* Editorial Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex h-[60px] items-center justify-between px-6 md:px-12 bg-background/80 backdrop-blur-xl border-b border-border">
-        <Link href="/" className="flex items-center gap-2.5 select-none hover:opacity-85 transition-opacity">
-          <svg className="w-5 h-5 shrink-0" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M50 15L18 80H36L50 48L64 80H82L50 15Z" fill="url(#trigarty-principles-gradient)" />
-            <defs>
-              <linearGradient id="trigarty-principles-gradient" x1="18" y1="15" x2="82" y2="80" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#63B7C9" />
-                <stop offset="25%" stopColor="#4BC5C7" />
-                <stop offset="50%" stopColor="#4DC2B1" />
-                <stop offset="75%" stopColor="#A4BE4B" />
-                <stop offset="100%" stopColor="#E9A400" />
-              </linearGradient>
-            </defs>
-          </svg>
-          <div className="font-sans font-light tracking-[0.25em] text-[13px] flex items-center uppercase">
-            <span className="text-trigarty-cyan">T</span>
-            <span className="text-trigarty-aqua">R</span>
-            <span className="text-trigarty-mint">I</span>
-            <span className="text-trigarty-soft">G</span>
-            <span className="text-trigarty-fresh font-medium">Λ</span>
-            <span className="text-trigarty-olive">R</span>
-            <span className="text-trigarty-mustard">T</span>
-            <span className="text-trigarty-golden">Y</span>
+    <>
+      <PageHero
+        crumbs={[{ name: "Principles", href: "/principles" }]}
+        eyebrow="Principles"
+        title={
+          <>
+            Not a vendor. <span className="hl">An extension of your team.</span>
+          </>
+        }
+        lede="We don't just tell organizations what to change. We work with them to build the change."
+      >
+        <Link href="/approach" className="btn btn-spectrum">
+          See how we work <Arrow />
+        </Link>
+        <Link href="/contact" className="btn btn-ghost">
+          Start a conversation <Arrow />
+        </Link>
+      </PageHero>
+
+      {/* Positioning statement */}
+      <section aria-labelledby="definition-heading" className="section-padding bg-background">
+        <div className="container-max grid grid-cols-1 lg:grid-cols-[minmax(0,18rem)_1fr] gap-8 lg:gap-16">
+          <div data-reveal>
+            <p className="eyebrow">Definition</p>
+            <h2 id="definition-heading" className="sr-only">
+              What Trigarty is
+            </h2>
           </div>
-        </Link>
-        <Link href="/engage" className="text-xs font-medium text-foreground border border-input px-4 py-1.5 rounded-[2px] tracking-[0.02em] hover:bg-foreground hover:text-background transition-colors">
-          Talk With Us
-        </Link>
-      </nav>
-
-      {/* Main Content */}
-      <main className="pt-[140px] pb-[160px] px-6 md:px-12">
-        <div className="max-w-[740px] mx-auto">
-          {/* Header */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-14 pb-12 border-b border-border"
-          >
-            <Link href="/" className="inline-flex items-center gap-2 text-[11px] font-mono uppercase tracking-[0.15em] text-muted hover:text-foreground transition-colors mb-8 group">
-              <ArrowLeft className="h-3 w-3 group-hover:-translate-x-1 transition-transform" />
-              Back to Overview
-            </Link>
-            
-            <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-trigarty-mint mb-5 flex items-center gap-2">
-              <span className="w-4 h-px bg-trigarty-mint block"></span>
-              METHODOLOGY ESSAY
-            </div>
-            
-            <h1 className="font-serif text-4xl sm:text-5xl md:text-[64px] font-normal leading-[1.05] tracking-[-0.03em] mb-6">
-              Execution is the moat.<br />
-              <em className="italic text-trigarty-cyan font-light">Strategy is cheap.</em>
-            </h1>
-            
-            <p className="text-[15px] font-mono uppercase tracking-[0.05em] text-muted leading-relaxed mt-8">
-              Why fast companies win, how structure breeds velocity, and our approach to embedded operational leadership.
+          <div data-reveal>
+            <p className="t-statement text-[clamp(1.625rem,1.2rem+1.8vw,2.75rem)] max-w-[28ch]">
+              An embedded transformation and building company that works as an extension of organizations to{" "}
+              <span className="hl">build what&apos;s next,</span> improve what exists, and rebuild what no longer works.
             </p>
-          </motion.div>
-
-          {/* Typography Body */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 1 }}
-            className="prose prose-neutral max-w-none"
-          >
-            {sections.map((section, idx) => (
-              <div key={idx} className="mb-14 relative grid grid-cols-1 md:grid-cols-[60px_1fr] gap-6 items-start">
-                <span className="font-serif text-3xl italic text-trigarty-mint/70 block pt-1">{section.num}</span>
-                <div>
-                  <h3 className="font-serif text-2xl font-normal text-foreground tracking-[-0.01em] mb-4.5">{section.title}</h3>
-                  <p className="text-[15px] text-muted leading-[1.8] font-light font-sans text-justify">
-                    {section.content}
-                  </p>
+            <dl className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-px bg-border border border-border">
+              {[
+                ["Motto", "Build what's next."],
+                ["Operating principle", "Not a vendor. An extension of your team."],
+                ["Purpose", "To help organizations become capable of what they need to become next."],
+              ].map(([k, v]) => (
+                <div key={k} className="bg-surface p-6">
+                  <dt className="t-label mb-3">{k}</dt>
+                  <dd className="text-[16px] leading-[1.5] font-medium">{v}</dd>
                 </div>
-              </div>
-            ))}
+              ))}
+            </dl>
+          </div>
+        </div>
+      </section>
 
-            {/* Sidebar Callout */}
-            <div className="bg-card p-8 rounded-[4px] border border-border my-12 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 bottom-0 w-[4px] bg-trigarty-cyan" />
-              <div className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted mb-3">OPERATOR'S CREED</div>
-              <p className="font-serif text-[18px] italic text-foreground leading-[1.65] font-light">
-                "We do not build software dashboards that summarize reports. We write the tracking pipelines, run the onboarding calls, design the sprint boards, and step out only when the company's internal team runs faster than we ever did."
-              </p>
-            </div>
+      {/* Six differences */}
+      <section aria-labelledby="differences-heading" className="section-padding bg-card">
+        <div className="container-max">
+          <SectionHeader
+            id="differences-heading"
+            eyebrow="What makes us different"
+            title={
+              <>
+                Six commitments behind <span className="hl">the way we work.</span>
+              </>
+            }
+            intro="An external team that works like an internal one. Each of these changes what you can expect from us."
+          />
 
-            <p className="text-[15px] text-muted leading-[1.8] font-light font-sans mb-12">
-              If your company has reached a stage where coordination overhead exceeds shipping velocity, or where critical functional operations (hiring, systems scaling, product iterations) are blocked by founder bandwidth — let's construct a cleaner system together.
-            </p>
-
-            <div className="pt-8 border-t border-border flex justify-between items-center">
+          <ol className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <li className="md:col-span-2 on-ink relative p-7 md:p-10 lg:p-12 grid grid-cols-1 lg:grid-cols-[1fr_1.2fr] gap-8 lg:gap-16" data-reveal>
               <div>
-                <div className="font-mono text-[10px] text-muted uppercase tracking-[0.1em]">Author</div>
-                <div className="text-[14px] font-medium text-foreground mt-1">Trigarty Core Operators</div>
+                <span className="t-num">{first.num}</span>
+                <h3 className="t-h2 text-on-ink mt-6 text-[clamp(1.75rem,1.35rem+1.6vw,2.75rem)]">
+                  We are <span className="hl">not a vendor.</span>
+                </h3>
+                <p className="t-body mt-5">{first.body}</p>
               </div>
-              <Link href="/engage" className="inline-flex items-center gap-2 bg-foreground text-background font-sans text-[13px] font-medium px-5 py-3 rounded-[2px] tracking-[0.01em] hover:bg-trigarty-cyan hover:text-white transition-colors">
-                Initiate Onboarding Diagnostics
-                <ArrowUpRight className="h-4 w-4" />
+              <dl className="flex flex-col gap-3 self-end">
+                <div className="panel-ink p-5">
+                  <dt className="t-label mb-3">A vendor</dt>
+                  <dd className="text-on-ink-muted">
+                    <Flow steps={VENDOR_FLOW} label="How a vendor works" />
+                  </dd>
+                </div>
+                <div className="g-border p-5">
+                  <dt className="t-label mb-3 text-on-ink">Trigarty</dt>
+                  <dd>
+                    <Flow steps={OUR_FLOW} label="How Trigarty works" emphasis />
+                  </dd>
+                </div>
+              </dl>
+            </li>
+
+            {rest.map((d, i) => {
+              const link = ROW_LINKS[d.num];
+              return (
+                <li
+                  key={d.num}
+                  className={`panel relative p-7 md:p-10 flex flex-col ${rest.length % 2 === 1 && i === rest.length - 1 ? "md:col-span-2" : ""}`}
+                  data-reveal
+                  style={{ "--d": i % 2 } as React.CSSProperties}
+                >
+                  <span className="t-num">{d.num}</span>
+                  <h3 className="t-h3 text-[clamp(1.375rem,1.2rem+0.7vw,1.75rem)] mt-6 max-w-[24ch]">{d.title}</h3>
+                  <p className="t-body mt-4">{d.body}</p>
+                  {link && (
+                    <Link href={link.href} className="more-link self-start mt-auto pt-6">
+                      {link.label} <Arrow />
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+      </section>
+
+      {/* What we are not */}
+      <section aria-labelledby="not-heading" className="on-ink section-padding">
+        <div className="container-max grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20 items-end">
+          <div data-reveal>
+            <p className="eyebrow">Positioning</p>
+            <h2 id="not-heading" className="sr-only">
+              What we are not
+            </h2>
+            <ul aria-label="What Trigarty is not">
+              {NOT_LIST.map((item) => (
+                <li key={item} className="flex items-baseline gap-5 py-2 md:py-3 border-b border-on-ink-line">
+                  <span className="t-label w-10 shrink-0">Not</span>
+                  <span
+                    className="font-serif font-medium text-[clamp(1.75rem,1.3rem+2vw,3rem)] leading-[1.1] tracking-[-0.03em] text-on-ink/85
+                               bg-no-repeat bg-[length:100%_3px] bg-[position:0_58%]"
+                    style={{ backgroundImage: "var(--spectrum)" }}
+                  >
+                    {lowerFirst(item)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="flex flex-col gap-6" data-reveal style={{ "--d": 1 } as React.CSSProperties}>
+            <p className="t-statement text-on-ink max-w-[20ch]">Those are mechanisms or capabilities.</p>
+            <p className="t-lede">
+              Trigarty builds <span className="hl">capabilities</span> by solving important organizational problems.
+            </p>
+            <p className="t-body">
+              Some of what we build is strategy, some is software, some is a team structure or a growth system. The output depends on the problem, not on a
+              service menu, and you do not need to decide in advance which kind of firm you need.
+            </p>
+            <div className="flex flex-wrap gap-x-8">
+              <Link href="/capabilities" className="more-link">
+                See the six capabilities <Arrow />
+              </Link>
+              <Link href="/who-we-work-with" className="more-link">
+                Who we work with <Arrow />
               </Link>
             </div>
-          </motion.div>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Long-term ambition */}
+      <section aria-labelledby="becoming-heading" className="section-padding bg-background">
+        <div className="container-max grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-20">
+          <div data-reveal>
+            <p className="eyebrow">What we are becoming</p>
+            <h2 id="becoming-heading" className="t-h2 max-w-[20ch]">
+              An institution that becomes <span className="hl">more capable</span> every time it solves an important problem.
+            </h2>
+            <p className="t-lede mt-6">
+              Every serious problem we solve should leave the client stronger, and it should make Trigarty more capable. Over time, the work is meant to
+              compound:
+            </p>
+            <div className="panel mt-8 p-5 md:p-6">
+              <Flow steps={LONG_TERM_CHAIN} label="How solved problems compound over time" emphasis />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-6" data-reveal style={{ "--d": 1 } as React.CSSProperties}>
+            <h3 className="t-label">What one client problem can create</h3>
+            <ol className="panel px-6 py-2">
+              {IP_OUTCOMES.map((o, i) => (
+                <li key={o} className="flex items-baseline gap-4 py-3.5 border-b border-border last:border-b-0">
+                  <span className="t-num w-6 shrink-0">{pad(i + 1)}</span>
+                  <span className="font-serif text-[1.125rem]">{o}</span>
+                </li>
+              ))}
+            </ol>
+            <p className="t-body">
+              This keeps Trigarty from becoming a pure labor-based services company. When an opportunity is important enough to become a business of its own, a
+              separate venture mechanism exists for it.
+            </p>
+            <Link href="/ventures" className="more-link self-start">
+              See the ventures <Arrow />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <CtaBand
+        eyebrow="Work with us"
+        title={
+          <>
+            Work with a team that <span className="hl">builds the change with you.</span>
+          </>
+        }
+        body="You do not need to decide which service you need. Tell us where you are and where you want to go, and we will work out with you what it takes to get there."
+      />
+    </>
   );
 }
