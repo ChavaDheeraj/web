@@ -1,4 +1,5 @@
 import { Flow } from "@/components/blocks";
+import { HScroll } from "@/components/h-scroll";
 import { MODELS, PROVIDERS, STEPS } from "@/content/site-content";
 import { pad, spectrumSegment, spectrumStep } from "@/lib/brand";
 
@@ -124,15 +125,16 @@ export function ModelCompare() {
 }
 
 /* ---------- The six steps as a track ----------
-   Numbered nodes on a spectrum line. Six columns on desktop, three on tablets,
-   a stacked list on phones. For ink. */
+   Numbered nodes on one continuous spectrum line (each segment reaches across the
+   gap to the next). Six columns from xl; below that the track scrolls sideways,
+   which suits a sequence better than a stack. For ink. */
 
 export function StepTrack({ detail = false }: { detail?: boolean }) {
   return (
-    <ol className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-6 gap-x-6 gap-y-10">
+    <HScroll label="Six steps" until="xl" cols={6} itemWidth="min(15rem, 68vw)" gap="1.5rem" ordered>
       {STEPS.map((s, i) => (
-        <li key={s.num} className="relative pt-12" data-reveal style={{ "--d": i } as React.CSSProperties}>
-          <span aria-hidden="true" className={`absolute left-0 top-[17px] h-[2px] right-0 ${i < STEPS.length - 1 ? "xl:-right-6" : ""}`} style={{ background: spectrumSegment(i, STEPS.length) }} />
+        <li key={s.num} className="relative pt-12">
+          <span aria-hidden="true" className={`absolute left-0 top-[17px] h-[2px] ${i < STEPS.length - 1 ? "-right-6" : "right-0"}`} style={{ background: spectrumSegment(i, STEPS.length) }} />
           <span
             aria-hidden="true"
             className="absolute left-0 top-0 w-9 h-9 grid place-items-center bg-ink font-mono text-[12px] text-on-ink border"
@@ -145,6 +147,6 @@ export function StepTrack({ detail = false }: { detail?: boolean }) {
           {detail && <p className="mt-3 text-[14px] leading-[1.6] text-on-ink-muted">{s.detail}</p>}
         </li>
       ))}
-    </ol>
+    </HScroll>
   );
 }

@@ -1,5 +1,6 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { PHASE_DEVELOPMENT_SERVER } from "next/constants.js";
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 
@@ -47,4 +48,9 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+/* `next dev` writes to .next-dev and `next build` to .next (the folder Vercel and
+   `next start` read). Sharing one folder meant a build run while the dev server was
+   up replaced its files underneath it ("Cannot find module './897.js'"). */
+export default function config(phase) {
+  return { ...nextConfig, distDir: phase === PHASE_DEVELOPMENT_SERVER ? ".next-dev" : ".next" };
+}

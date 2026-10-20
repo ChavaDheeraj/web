@@ -27,7 +27,10 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    // Browser extensions add attributes to <html> before React hydrates (for example
+    // crxlauncher=""). This silences only that element's own attribute mismatches;
+    // mismatches anywhere inside the page are still reported.
+    <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-background text-foreground font-sans antialiased">
         <a href="#main" className="skip-link">
           Skip to content

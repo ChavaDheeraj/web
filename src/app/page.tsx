@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Arrow, CtaBand, Flow, HeroArt, SectionHeader, StageLadder } from "@/components/blocks";
 import { GapDiagram, ModelCompare, StepTrack } from "@/components/diagrams";
+import { HScroll } from "@/components/h-scroll";
 import { SegmentExplorer } from "@/components/segment-explorer";
 import { CAPABILITIES, IP_CHAIN, OUTGROWN, PROBLEMS, REBUILD_CHAIN } from "@/content/site-content";
 import { pad } from "@/lib/brand";
@@ -212,10 +213,10 @@ export default function Home() {
             }
             intro={<p>You don&apos;t need to choose a service first. We start with the objective and bring in the capabilities it needs.</p>}
           />
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {CAPABILITIES.map((c, i) => (
-              <li key={c.id} data-reveal style={delay(i % 3)}>
-                <Link href={`/capabilities#${c.id}`} className="card-link p-7 md:p-8 min-h-[17rem]">
+          <HScroll label="Six core capabilities" until="lg" cols={3} itemWidth="min(19rem, 78vw)">
+            {CAPABILITIES.map((c) => (
+              <li key={c.id} className="flex">
+                <Link href={`/capabilities#${c.id}`} className="card-link w-full p-7 md:p-8 min-h-[17rem]">
                   <span className="flex items-center justify-between mb-10">
                     <span aria-hidden="true" className="block h-[3px] w-10" style={{ background: c.accent }} />
                     <span className="t-num">{c.num}</span>
@@ -228,7 +229,7 @@ export default function Home() {
                 </Link>
               </li>
             ))}
-          </ul>
+          </HScroll>
         </div>
       </section>
 

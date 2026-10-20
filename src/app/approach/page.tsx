@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Arrow, CtaBand, PageHero, SectionHeader } from "@/components/blocks";
 import { ModelCompare } from "@/components/diagrams";
+import { HScroll } from "@/components/h-scroll";
 import { FIRST_QUESTIONS, STEPS } from "@/content/site-content";
 import { pad, spectrumSegment, spectrumStep } from "@/lib/brand";
 import { pageMetadata } from "@/lib/seo";
@@ -152,16 +153,16 @@ export default function ApproachPage() {
             </div>
           </div>
 
-          <ol aria-label="Questions we ask first" className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-border border border-border">
+          <HScroll label="Questions we ask first" until="lg" cols={2} itemWidth="min(17rem, 74vw)" gap="0.75rem" ordered>
             {FIRST_QUESTIONS.map((q, i) => (
-              <li key={q} className="bg-surface p-5 sm:p-6 flex sm:flex-col items-baseline sm:items-start gap-4 sm:gap-5" data-reveal style={{ "--d": i % 2 } as React.CSSProperties}>
+              <li key={q} className="panel p-6 flex flex-col gap-5 min-h-[9.5rem] lg:min-h-0">
                 <span className="flex items-center gap-2.5 t-num shrink-0" aria-hidden="true">
                   {pad(i + 1)}
                 </span>
                 <span className="font-serif text-[1.25rem] md:text-[1.375rem] leading-[1.25] tracking-[-0.015em]">{q}</span>
               </li>
             ))}
-          </ol>
+          </HScroll>
         </div>
       </section>
 

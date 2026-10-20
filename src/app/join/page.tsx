@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Arrow, PageHero } from "@/components/blocks";
+import { HScroll } from "@/components/h-scroll";
 import { IconGraphic } from "@/components/logo";
 import { VENTURES } from "@/content/site-content";
 import { SITE, mailto } from "@/lib/site";
@@ -146,10 +147,10 @@ export default function JoinPage() {
           </div>
 
           <nav aria-label="Role tracks">
-            <ol className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <HScroll label="Track cards" until="lg" cols={4} itemWidth="min(16rem, 70vw)" ordered>
               {TRACKS.map((t, i) => (
-                <li key={t.id} data-reveal style={{ "--d": i } as React.CSSProperties}>
-                  <a href={`#${t.id}`} className="card-link p-6 min-h-[12rem]">
+                <li key={t.id} className="flex">
+                  <a href={`#${t.id}`} className="card-link w-full p-6 min-h-[12rem]">
                     <span className="flex items-center justify-between mb-auto">
                       <span aria-hidden="true" className="block h-[3px] w-10" style={{ background: t.accent }} />
                       <span className="t-num">{pad(i + 1)}</span>
@@ -163,7 +164,7 @@ export default function JoinPage() {
                   </a>
                 </li>
               ))}
-            </ol>
+            </HScroll>
           </nav>
         </div>
       </section>

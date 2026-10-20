@@ -15,17 +15,28 @@ export function SegmentExplorer() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[19rem_1fr] gap-8 lg:gap-12 items-stretch">
-      <div role="group" aria-label="Choose an organization type" className="grid grid-cols-2 lg:grid-cols-1 gap-1.5 content-start">
+      {/* Below lg: a swipeable strip of tabs that bleeds over the page gutters, so the
+          result panel stays directly underneath. From lg: a vertical list. */}
+      <div
+        role="group"
+        aria-label="Choose an organization type"
+        className="flex lg:grid lg:grid-cols-1 gap-1.5 content-start overflow-x-auto lg:overflow-visible snap-x snap-mandatory
+                   -mx-[var(--gutter)] px-[var(--gutter)] scroll-px-[var(--gutter)] lg:mx-0 lg:px-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {SEGMENTS.map((s, i) => (
           <button
             key={s.id}
             type="button"
             aria-pressed={i === active}
-            onClick={() => setActive(i)}
-            className="group relative flex items-center gap-4 min-h-14 px-3 sm:px-4 py-3 text-left border border-border bg-surface/60
+            onClick={(e) => {
+              setActive(i);
+              const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+              e.currentTarget.scrollIntoView({ block: "nearest", inline: "nearest", behavior: reduce ? "auto" : "smooth" });
+            }}
+            className="group relative shrink-0 snap-start flex items-center gap-4 min-h-14 px-4 py-3 text-left border border-border bg-surface/60 whitespace-nowrap lg:whitespace-normal
                        text-muted hover:text-foreground hover:bg-surface aria-pressed:text-foreground aria-pressed:bg-surface aria-pressed:border-foreground/25 transition-colors"
           >
-            <span className="t-num hidden sm:inline">{pad(i + 1)}</span>
+            <span className="t-num">{pad(i + 1)}</span>
             <span className="font-serif text-[1rem] sm:text-[1.125rem] leading-tight flex-1">{s.name}</span>
             <span
               aria-hidden="true"

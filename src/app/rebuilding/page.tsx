@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageHero, SectionHeader, CtaBand, Arrow } from "@/components/blocks";
+import { HScroll } from "@/components/h-scroll";
 import { CAPABILITIES, OUTGROWN, REBUILD_CHAIN, LEGACY_MOVES, SEGMENTS } from "@/content/site-content";
 import { pad, spectrumSegment } from "@/lib/brand";
 import { pageMetadata } from "@/lib/seo";
@@ -114,11 +115,11 @@ export default function RebuildingPage() {
             intro="When the problem is structural, the work spans business, people, operations, technology, product and growth. We work across all of them with your team, rather than handing each one to a different provider."
           />
 
-          <ol aria-label="The rebuild chain" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-px bg-on-ink-line border border-on-ink-line">
+          <HScroll label="The rebuild chain" until="lg" cols={7} itemWidth="min(13rem, 62vw)" gap="2px" ordered>
             {REBUILD_CHAIN.map((step, i) => {
               const cap = capabilityById(CHAIN_CAPABILITY[step]);
               return (
-                <li key={step} className="bg-ink relative flex flex-col gap-6 p-5 lg:min-h-[13rem]" data-reveal style={{ "--d": i } as React.CSSProperties}>
+                <li key={step} className="bg-ink border border-on-ink-line relative flex flex-col gap-6 p-5 min-h-[12rem] lg:min-h-[13rem]">
                   <span aria-hidden="true" className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: spectrumSegment(i, REBUILD_CHAIN.length) }} />
                   <span className="t-num">{pad(i + 1)}</span>
                   <h3 className="t-h3 text-on-ink">{step}</h3>
@@ -129,7 +130,7 @@ export default function RebuildingPage() {
                 </li>
               );
             })}
-          </ol>
+          </HScroll>
 
           <div className="mt-12">
             <Link href="/capabilities" className="more-link">
@@ -211,14 +212,14 @@ export default function RebuildingPage() {
             }
             intro="These are directions we see in the market, not research findings. What they mean for your organization depends on where it is today, and that is where any rebuild starts."
           />
-          <ol aria-label="Market directions" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <HScroll label="Market directions" until="xl" cols={4} itemWidth="min(18rem, 76vw)" ordered>
             {SIGNALS.map((s, i) => (
-              <li key={s} className="panel relative p-6 md:p-7 flex flex-col gap-8" data-reveal style={{ "--d": i } as React.CSSProperties}>
+              <li key={s} className="panel relative p-6 md:p-7 flex flex-col gap-8 h-full">
                 <span className="t-num">{pad(i + 1)}</span>
                 <p className="font-serif text-[1.25rem] leading-[1.3] tracking-[-0.015em]">{s}</p>
               </li>
             ))}
-          </ol>
+          </HScroll>
           <div className="mt-10 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-6 items-center" data-reveal>
             <p className="t-body">
               When AI starts to perform work rather than only assist people, an organization still running on legacy technology and processes may need more than

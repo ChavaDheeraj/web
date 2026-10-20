@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageHero, SectionHeader, CtaBand, Flow, Arrow } from "@/components/blocks";
+import { HScroll } from "@/components/h-scroll";
 import { SegmentExplorer } from "@/components/segment-explorer";
 import { SEGMENTS } from "@/content/site-content";
 import { pad } from "@/lib/brand";
@@ -115,11 +116,11 @@ export default function WhoWeWorkWithPage() {
             }
           />
 
-          <ol className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <HScroll label="Six organization types" until="lg" cols={2} itemWidth="min(30rem, 86vw)" ordered>
             {SEGMENTS.map((s, i) => {
               const d = DETAIL[s.id];
               return (
-                <li key={s.id} id={s.id} className="panel relative scroll-mt-28 p-7 md:p-10 flex flex-col" data-reveal style={{ "--d": i % 2 } as React.CSSProperties}>
+                <li key={s.id} id={s.id} className="panel relative scroll-mt-28 p-7 md:p-10 flex flex-col">
                   <div className="flex items-start justify-between gap-4 mb-6">
                     <h3 className="t-h2 text-[clamp(1.625rem,1.3rem+1.2vw,2.25rem)]">{s.name}</h3>
                     <span className="t-num pt-2">{pad(i + 1)}</span>
@@ -146,7 +147,7 @@ export default function WhoWeWorkWithPage() {
                 </li>
               );
             })}
-          </ol>
+          </HScroll>
         </div>
       </section>
 

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Arrow, CtaBand, Flow, PageHero, SectionHeader } from "@/components/blocks";
+import { HScroll } from "@/components/h-scroll";
 import { IP_CHAIN, IP_OUTCOMES, LONG_TERM_CHAIN, VENTURES } from "@/content/site-content";
 import { pad, spectrumSegment } from "@/lib/brand";
 import { pageMetadata } from "@/lib/seo";
@@ -92,9 +93,10 @@ export default function VenturesPage() {
       </section>
 
       {/* Current ventures */}
-      <section id="ventures" aria-labelledby="ventures-heading" className="on-ink section-padding">
-        <div className="container-max">
-          <SectionHeader
+      <section id="ventures" aria-labelledby="ventures-heading" className="on-ink py-[clamp(4.5rem,3rem+6vw,8.5rem)]">
+        <div className="gutter">
+          <div className="container-max">
+            <SectionHeader
             id="ventures-heading"
             eyebrow="Current ventures"
             title={
@@ -103,13 +105,16 @@ export default function VenturesPage() {
               </>
             }
             intro="Ventures are one mechanism, not the whole of Trigarty. When an opportunity is important enough to become its own business, it moves through a separate venture mechanism."
-          />
+            />
+          </div>
+        </div>
 
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div data-reveal>
+          <HScroll label="Current ventures" bleed="viewport" itemWidth="min(32rem, 84vw)">
             {VENTURES.map((v, i) => {
               const headingId = `venture-${v.id}`;
               return (
-                <li key={v.id} data-reveal style={{ "--d": i } as React.CSSProperties}>
+                <li key={v.id}>
                   <article aria-labelledby={headingId} className="panel-ink relative h-full p-7 md:p-8 flex flex-col">
                     <span aria-hidden="true" className="absolute top-0 left-0 right-0 h-[3px]" style={{ background: v.accent }} />
                     <div className="flex items-center justify-between mb-10">
@@ -138,9 +143,11 @@ export default function VenturesPage() {
                 </li>
               );
             })}
-          </ul>
+          </HScroll>
+        </div>
 
-          <div className="mt-12 flex flex-col sm:flex-row sm:items-center justify-between gap-4" data-reveal>
+        <div className="gutter">
+          <div className="container-max mt-12 flex flex-col sm:flex-row sm:items-center justify-between gap-4" data-reveal>
             <p className="t-body">Want to work on one of these ventures?</p>
             <Link href="/join" className="more-link">
               See how to join Trigarty <Arrow />
